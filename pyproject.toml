@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "el_decko_ui_gtk4"
+dynamic = ["version", "readme"]
+description = "El Decko GTK4 User Interface"
+license = { text = "GPL-3"}
+dependencies = [
+    "el_decko_core>=2022.12.28",
+    "xdg"
+]
+
+[project.scripts]
+el-decko-gtk4 = "ed_ui_gtk4:run"
+
+[tool.setuptools.dynamic]
+version = {attr = "ed_ui_gtk4.VERSION"}
+readme = {file = ["README.md"]}
+
+[tool.setuptools]
+include-package-data = true
+platforms = ["Linux"]
