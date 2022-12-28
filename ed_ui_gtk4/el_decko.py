@@ -1,4 +1,3 @@
-import sys
 import gi
 
 gi.require_version('Gtk', '4.0')
@@ -9,7 +8,12 @@ from gi.repository import Gtk, Adw
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Things will go here
+        self.set_default_size(600, 250)
+        self.set_title("El Decko")
+        self.box1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.set_child(self.box1)
+        self.button = Gtk.Button(label="Hello")
+        self.box1.append(self.button)
 
 
 class ElDecko(Adw.Application):
