@@ -12,24 +12,51 @@ from ed_core import streamdeck
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.core_thread_running = False
+
         self.set_default_size(600, 250)
         self.set_title("El Decko")
+
         self.header = Gtk.HeaderBar()
         self.set_titlebar(self.header)
+
         self.dd_decks = Gtk.DropDown()
         self.header.pack_start(self.dd_decks)
-        self.bt_launch = Gtk.Button(label="Launch")
-        self.bt_launch.connect("clicked", self.launch_core)
+
+        self.bt_launch = Gtk.ToggleButton(label="Launch")
+        self.bt_launch.connect("clicked", self.start_stop_core)
         self.header.pack_end(self.bt_launch)
+
+        self.bt_reload = Gtk.Button(label="Reload")
+        self.bt_reload.connect("clicked", self.reload_core)
+        self.bt_reload.set_visible(False)
+        self.header.pack_end(self.bt_reload)
+
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.set_child(self.main_box)
         self.create_button_grid()
 
-    def launch_core(self, button):
-        threading.Thread(target=ed_core.run, args=(False,), daemon=True).start()
+    def start_stop_core(self, button):
+        if not self.core_thread_running:
+            self.start_core()
+        else:
+            self.stop_core()
 
-    def __run_core(self):
-        ed_core.run(False)
+    def start_core(self):
+        self.bt_launch.set_label("Stop")
+        self.core_thread_running = True
+        self.bt_reload.set_visible(True)
+        threading.Thread(target=ed_core.run, args=(False,)).start()
+
+    def stop_core(self):
+        ed_core.stop_core()
+        self.bt_reload.set_visible(False)
+        self.bt_launch.set_label("Launch")
+        self.core_thread_running = False
+
+    def reload_core(self, button):
+        self.stop_core()
+        self.start_core()
 
     def create_button_grid(self):
         if streamdeck.get_stream_decks():
@@ -53,8 +80,13 @@ class MainWindow(Gtk.ApplicationWindow):
 class ElDecko(Adw.Application):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.connect('activate', self.on_activate)
+        self.connect("activate", self.on_activate)
+        self.connect("shutdown", self.on_close)
+        self.win = None
 
     def on_activate(self, app):
         self.win = MainWindow(application=app)
         self.win.present()
+
+    def on_close(self, app):
+        self.win.stop_core()
