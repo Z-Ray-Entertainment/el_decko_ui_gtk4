@@ -1,9 +1,11 @@
+import threading
+
 import gi
 import ed_core
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw
+from gi.repository import GLib, Gtk, GObject, Adw
 from ed_core import streamdeck
 
 
@@ -16,10 +18,20 @@ class MainWindow(Gtk.ApplicationWindow):
         self.set_titlebar(self.header)
         self.dd_decks = Gtk.DropDown()
         self.header.pack_start(self.dd_decks)
-
+        self.bt_launch = Gtk.Button(label="Launch")
+        self.bt_launch.connect("clicked", self.launch_core)
+        self.header.pack_end(self.bt_launch)
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.set_child(self.main_box)
         self.create_button_grid()
+
+    def launch_core(self, button):
+        core = threading.Thread(target=self.__run_core())
+        core.daemon = True
+        core.start()
+
+    def __run_core(self):
+        ed_core.run()
 
     def create_button_grid(self):
         if streamdeck.get_stream_decks():
