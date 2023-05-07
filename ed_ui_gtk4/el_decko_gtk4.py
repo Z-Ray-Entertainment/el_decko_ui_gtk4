@@ -12,7 +12,7 @@ from ed_core import streamdeck
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.core_thread_running = False
+        self.core_running = False
 
         self.set_default_size(600, 250)
         self.set_title("El Decko")
@@ -37,22 +37,23 @@ class MainWindow(Gtk.ApplicationWindow):
         self.create_button_grid()
 
     def start_stop_core(self, button):
-        if not self.core_thread_running:
+        if not self.core_running:
             self.start_core()
         else:
             self.stop_core()
 
     def start_core(self):
         self.bt_launch.set_label("Stop")
-        self.core_thread_running = True
+        self.core_running = True
         self.bt_reload.set_visible(True)
         threading.Thread(target=ed_core.run, args=(False,)).start()
 
     def stop_core(self):
-        ed_core.stop_core()
-        self.bt_reload.set_visible(False)
-        self.bt_launch.set_label("Launch")
-        self.core_thread_running = False
+        if self.core_running:
+            ed_core.stop_core()
+            self.bt_reload.set_visible(False)
+            self.bt_launch.set_label("Launch")
+            self.core_running = False
 
     def reload_core(self, button):
         self.stop_core()
