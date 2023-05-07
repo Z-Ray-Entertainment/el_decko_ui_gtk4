@@ -26,12 +26,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self.create_button_grid()
 
     def launch_core(self, button):
-        core = threading.Thread(target=self.__run_core())
-        core.daemon = True
-        core.start()
+        threading.Thread(target=ed_core.run, args=(False,), daemon=True).start()
 
     def __run_core(self):
-        ed_core.run()
+        ed_core.run(False)
 
     def create_button_grid(self):
         if streamdeck.get_stream_decks():
