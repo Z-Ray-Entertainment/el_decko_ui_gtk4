@@ -20,8 +20,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self.header = Gtk.HeaderBar()
         self.set_titlebar(self.header)
 
-        self.dd_decks = Gtk.DropDown()
-        self.header.pack_start(self.dd_decks)
+        self.cb_decks = Gtk.ComboBoxText()
+        self.header.pack_start(self.cb_decks)
 
         self.bt_launch = Gtk.ToggleButton(label="Launch")
         self.bt_launch.connect("clicked", self.start_stop_core)
@@ -61,12 +61,14 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def create_button_grid(self):
         if streamdeck.get_stream_decks():
+            first: str = ""
             for index, deck in enumerate(streamdeck.get_stream_decks()):
                 deck.open()
-                self.dd_decks.set_list_factory()
+                if not first:
+                    first = deck.get_serial_number()
+                self.cb_decks.append(deck.get_serial_number(), deck.deck_type())
                 rows = deck.key_layout()[0]
                 columns = deck.key_layout()[1]
-                print("Rows: " + str(rows) + " | Columns: " + str(columns))
                 for i in range(0, rows):
                     row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
                     self.main_box.append(row_box)
@@ -74,6 +76,7 @@ class MainWindow(Gtk.ApplicationWindow):
                         button = Gtk.Button(label=str(i) + " | " + str(j))
                         row_box.append(button)
                 deck.close()
+            self.cb_decks.set_active_id(first)
         else:
             print("No Elgato Stream Deck devices found!")
 
