@@ -1,3 +1,4 @@
+import threading
 import gi
 
 gi.require_version('Gtk', '4.0')
@@ -13,7 +14,11 @@ class MainWindow(Gtk.ApplicationWindow):
         self.box1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.set_child(self.box1)
         self.button = Gtk.Button(label="Hello")
+        self.button.connect("clicked", self.btn_hello)
         self.box1.append(self.button)
+
+    def btn_hello(self, button):
+        print("Hello world!")
 
 
 class ElDecko(Adw.Application):
