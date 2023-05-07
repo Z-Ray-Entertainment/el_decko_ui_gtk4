@@ -9,7 +9,7 @@ description = "El Decko GTK4 User Interface"
 license = { text = "GPL-3"}
 dependencies = [
     "el_decko_core>=2022.12.28",
-    "xdg",
+    "xdg>=6.0.0",
     "PyGObject>=3.42.2"
 ]
 
