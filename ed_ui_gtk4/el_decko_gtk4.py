@@ -34,7 +34,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.set_child(self.main_box)
-        self.create_button_grid()
+
+        self.create_combo_box()
+        self.create_button_grid("0")
 
     def start_stop_core(self, button):
         if not self.core_running:
@@ -59,24 +61,26 @@ class MainWindow(Gtk.ApplicationWindow):
         self.stop_core()
         self.start_core()
 
-    def create_button_grid(self):
+    def create_combo_box(self):
         if streamdeck.get_stream_decks():
-            first: str = ""
             for index, deck in enumerate(streamdeck.get_stream_decks()):
                 deck.open()
-                if not first:
-                    first = deck.get_serial_number()
-                self.cb_decks.append(deck.get_serial_number(), deck.deck_type())
-                rows = deck.key_layout()[0]
-                columns = deck.key_layout()[1]
-                for i in range(0, rows):
-                    row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-                    self.main_box.append(row_box)
-                    for j in range(0, columns):
-                        button = Gtk.Button(label=str(i) + " | " + str(j))
-                        row_box.append(button)
-                deck.close()
-            self.cb_decks.set_active_id(first)
+                self.cb_decks.append(str(index), deck.deck_type())
+            self.cb_decks.set_active_id("0")
+
+    def create_button_grid(self, index):
+        if streamdeck.get_stream_decks():
+            deck = streamdeck.get_stream_decks()[int(index)]
+            deck.open()
+            rows = deck.key_layout()[0]
+            columns = deck.key_layout()[1]
+            for i in range(0, rows):
+                row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+                self.main_box.append(row_box)
+                for j in range(0, columns):
+                    button = Gtk.Button(label=str(i) + " | " + str(j))
+                    row_box.append(button)
+            deck.close()
         else:
             print("No Elgato Stream Deck devices found!")
 
