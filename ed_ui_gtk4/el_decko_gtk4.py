@@ -87,7 +87,7 @@ class MainWindow(Gtk.ApplicationWindow):
                     label = Gtk.Label()
                     if key_cfg["image_idle"]:
                         image.set_from_file(key_cfg["image_idle"])
-                        image.set_size_request(50,50)
+                        image.set_size_request(50, 50)
                         bt_box.append(image)
                     if key_cfg["label"]:
                         label.set_label(key_cfg["label"])
