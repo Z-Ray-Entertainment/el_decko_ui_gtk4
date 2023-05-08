@@ -24,10 +24,12 @@ class MainWindow(Gtk.ApplicationWindow):
         self.header.pack_start(self.cb_decks)
 
         self.bt_launch = Gtk.ToggleButton(label="Launch")
+        self.bt_launch.set_tooltip_text("Start/Stop El Decko Core")
         self.bt_launch.connect("clicked", self.start_stop_core)
         self.header.pack_end(self.bt_launch)
 
         self.bt_reload = Gtk.Button(label="Reload")
+        self.bt_reload.set_tooltip_text("Apply changed button configurations to your connected Stream Decks")
         self.bt_reload.connect("clicked", self.reload_core)
         self.bt_reload.set_visible(False)
         self.header.pack_end(self.bt_reload)
