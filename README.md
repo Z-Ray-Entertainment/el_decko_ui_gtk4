@@ -2,7 +2,7 @@
 GTK4 based user interface for [El Decko](https://github.com/Z-Ray-Entertainment/el-decko)
 
 **v 2023.5.8:**
-![](assets/el_decko_gtk4_2023_05_08.png)
+![](ed_ui_gtk4/assets/el_decko_gtk4_2023_05_08.png)
 
 ## requirements
 - typelib-1_0-Adw-1
