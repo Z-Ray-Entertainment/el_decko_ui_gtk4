@@ -32,7 +32,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.bt_reload.set_visible(False)
         self.header.pack_end(self.bt_reload)
 
-        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
         self.set_child(self.main_box)
 
         self.create_combo_box()
@@ -74,13 +74,29 @@ class MainWindow(Gtk.ApplicationWindow):
             deck.open()
             rows = deck.key_layout()[0]
             columns = deck.key_layout()[1]
+            serial = deck.get_serial_number()
+            deck.close()
+            current_key = 0
             for i in range(0, rows):
-                row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+                row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
                 self.main_box.append(row_box)
                 for j in range(0, columns):
-                    button = Gtk.Button(label=str(i) + " | " + str(j))
+                    key_cfg = streamdeck.get_key_config(serial, current_key)
+                    bt_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
+                    image = Gtk.Image()
+                    label = Gtk.Label()
+                    if key_cfg["image_idle"]:
+                        image.set_from_file(key_cfg["image_idle"])
+                        image.set_size_request(50,50)
+                        bt_box.append(image)
+                    if key_cfg["label"]:
+                        label.set_label(key_cfg["label"])
+                        bt_box.append(label)
+                    button = Gtk.Button(child=bt_box)
+                    button.set_size_request(150, 150)
                     row_box.append(button)
-            deck.close()
+                    current_key += 1
+
         else:
             print("No Elgato Stream Deck devices found!")
 
