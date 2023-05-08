@@ -10,6 +10,7 @@ GTK4 based user interface for El Decko
 ## Features
 - Start/Stop/Reload ed-core
 - Loads and displays Elgato Stream Deck button configs
+  - image_idle and label
 
 ### ToDo:
 - Change actual button configuration
