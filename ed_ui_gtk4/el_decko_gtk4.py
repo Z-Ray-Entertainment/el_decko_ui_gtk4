@@ -14,7 +14,7 @@ class MainWindow(Gtk.ApplicationWindow):
         super().__init__(*args, **kwargs)
         self.core_running = False
 
-        self.set_default_size(600, 250)
+        self.set_default_size(250, 300)
         self.set_title("El Decko")
 
         self.header = Gtk.HeaderBar()
@@ -32,7 +32,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self.bt_reload.set_visible(False)
         self.header.pack_end(self.bt_reload)
 
-        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
+        self.main_box = Gtk.Grid(orientation=Gtk.Orientation.VERTICAL,
+                                 margin_end=20, margin_top=20, margin_start=20, margin_bottom=20,
+                                 vexpand=True, hexpand=True, row_spacing=20, column_spacing=20,
+                                 width_request=600, height_request=250, row_homogeneous=True, column_homogeneous=True)
         self.set_child(self.main_box)
 
         self.create_combo_box()
@@ -78,11 +81,10 @@ class MainWindow(Gtk.ApplicationWindow):
             deck.close()
             current_key = 0
             for i in range(0, rows):
-                row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
-                self.main_box.append(row_box)
                 for j in range(0, columns):
                     key_cfg = streamdeck.get_key_config(serial, current_key)
-                    bt_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
+                    bt_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL,
+                                     halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER)
                     image = Gtk.Image()
                     label = Gtk.Label()
                     if key_cfg["image_idle"]:
@@ -93,8 +95,7 @@ class MainWindow(Gtk.ApplicationWindow):
                         label.set_label(key_cfg["label"])
                         bt_box.append(label)
                     button = Gtk.Button(child=bt_box)
-                    button.set_size_request(150, 150)
-                    row_box.append(button)
+                    self.main_box.attach(button, j, i, 1, 1)
                     current_key += 1
 
         else:
