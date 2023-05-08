@@ -6,6 +6,8 @@ GTK4 based user interface for El Decko
 
 ## requirements
 - typelib-1_0-Adw-1
+- El Decko Core >= 2023.5.8
+- PyGObject >= 3.42.2
 
 ## Features
 - Start/Stop/Reload ed-core
