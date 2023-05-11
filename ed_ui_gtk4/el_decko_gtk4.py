@@ -115,5 +115,5 @@ class ElDecko(Adw.Application):
         self.win = MainWindow(application=app)
         self.win.present()
 
-    def on_close(self, app):
+    def on_close(self):
         self.win.stop_core()

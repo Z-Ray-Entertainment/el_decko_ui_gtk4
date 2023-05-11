@@ -6,5 +6,4 @@ VERSION = "2023.5.8.2"
 
 
 def run():
-    app = ElDecko(application_id="de.zray.eldecko")
-    app.run(sys.argv)
+    ElDecko(application_id="de.zray.eldecko").run(sys.argv)
