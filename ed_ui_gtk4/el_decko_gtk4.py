@@ -6,7 +6,7 @@ import ed_core
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 from gi.repository import GLib, Gtk, GObject, Adw
-from ed_core import streamdeck, query_deck
+from ed_core import cache, core
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -67,24 +67,24 @@ class MainWindow(Gtk.ApplicationWindow):
         self.start_core()
 
     def create_combo_box(self):
-        if streamdeck.get_stream_decks():
-            for index, deck in enumerate(streamdeck.get_stream_decks()):
-                deck_type = query_deck.query_deck(deck, query_deck.QueryType.DECK_TYPE)
+        if cache.CACHE:
+            for index, deck in enumerate(cache.CACHE):
+                deck_type = deck["deck_type"]
                 self.cb_decks.append(str(index), deck_type)
             self.cb_decks.set_active_id("0")
 
     def create_button_grid(self, index):
-        if streamdeck.get_stream_decks():
-            deck = streamdeck.get_stream_decks()[int(index)]
-            key_layout = query_deck.query_deck(deck, query_deck.QueryType.KEY_LAYOUT)
-            serial = query_deck.query_deck(deck, query_deck.QueryType.SERIAL)
+        if cache.CACHE:
+            deck = cache.CACHE[int(index)]
+            key_layout = deck["key_layout"]
+            serial = deck["serial"]
             rows = key_layout[0]
             columns = key_layout[1]
             serial = serial
             current_key = 0
             for i in range(0, rows):
                 for j in range(0, columns):
-                    key_cfg = streamdeck.get_key_config(serial, current_key)
+                    key_cfg = core.get_key_config(serial, current_key)
                     bt_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL,
                                      halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER)
                     image = Gtk.Image()
