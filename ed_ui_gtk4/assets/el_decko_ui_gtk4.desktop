@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=El Decko
+Exec=el-decko-gtk4
+Icon=el-decko-logo.svg
+Terminal=false
+Categories=Utility
+MimeType=
+X-GNOME-Autostart-enabled=true
+Comment=Utility to launch and configure Elgato Stream Decks on Linux
+Comment[de]=Werkzeug zum Starten und Konfigurieren von Elgot Stream Decks unter Linux
