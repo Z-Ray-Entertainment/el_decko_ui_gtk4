@@ -1,3 +1,6 @@
+| :exclamation:  Discontinued there is now: [StreamController](https://flathub.org/de/apps/com.core447.StreamController)   |
+|-----------------------------------------|
+
 # El Decko GTK4
 GTK4 based user interface for [El Decko](https://github.com/Z-Ray-Entertainment/el-decko)
 
